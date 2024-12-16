@@ -1,5 +1,7 @@
-import type { Config } from "tailwindcss";
+// ./tailwind.config.ts
 
+import type { Config } from "tailwindcss";
+import tailwindForms from "@tailwindcss/forms";
 export default {
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -14,5 +16,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [tailwindForms],
 } satisfies Config;
