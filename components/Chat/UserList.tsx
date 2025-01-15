@@ -20,7 +20,7 @@ const getUserList = async () => {
  * @param {string} props.channelName - The name of the chat channel.
  */
 const ChatUserList: React.FC<{ channelName: string }> = ({ channelName }) => {
-  const { user: currentUser } = useUser(); // Get the current logged-in user's details.
+  const { user: currentUser, getPermitUser } = useUser(); // Get the current logged-in user's details.
   const [users, setUsers] = useState<UserRead[]>([]); // State to hold the list of users.
   const [canPromote, setCanPromote] = useState(false); // State to determine if the current user can promote others.
 
@@ -28,6 +28,7 @@ const ChatUserList: React.FC<{ channelName: string }> = ({ channelName }) => {
   const { publish } = useChannel(channelName, (message) => {
     if (message.name === "PROMOTE" || message.name === "DEMOTE") {
       fetchUsers(); // Fetch the updated user list when a promote/demote event occurs.
+      getPermitUser(); // Fetch the updated Permit.io user data when a promote/demote event occurs.
     }
   });
 
@@ -118,21 +119,21 @@ const ChatUserList: React.FC<{ channelName: string }> = ({ channelName }) => {
                 </p>
               )}
               {canPromote &&
-              !user?.roles?.find((role) => role.role === "moderator") ? (
-                <button
-                  className="btn"
-                  onClick={() => handlePromoteUser(user?.email)}
-                >
-                  Promote
-                </button>
-              ) : (
-                <button
-                  className="btn"
-                  onClick={() => handleDemoteUser(user?.email)}
-                >
-                  Demote
-                </button>
-              )}
+                (!user?.roles?.find((role) => role.role === "moderator") ? (
+                  <button
+                    className="btn"
+                    onClick={() => handlePromoteUser(user?.email)}
+                  >
+                    Promote
+                  </button>
+                ) : (
+                  <button
+                    className="btn"
+                    onClick={() => handleDemoteUser(user?.email)}
+                  >
+                    Demote
+                  </button>
+                ))}
             </div>
           </article>
         </li>
