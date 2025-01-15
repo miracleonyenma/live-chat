@@ -28,8 +28,7 @@ const Chat: React.FC<{ channelName: string }> = ({ channelName }) => {
           return !(matchingMessage && isOwnMessage);
         }),
       );
-    if (message.name === "PROMOTE") {
-      console.log("🟢🟢🟢🟢🟢 ~ message", message);
+    if (message.name === "PROMOTE" || message.name === "DEMOTE") {
       setMessages((messages) => [...messages, message as InboundMessage]);
     }
   });

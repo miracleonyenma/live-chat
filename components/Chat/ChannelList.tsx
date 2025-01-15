@@ -3,17 +3,35 @@
 // Imports necessary modules for navigation and routing
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 // Defines the available chat channels with their IDs and display names
-export const channels = [
-  { id: "general", name: "General" },
-  { id: "random", name: "Random" },
-  { id: "mod", name: "Moderators" },
-];
+export const getChannelList = async () => {
+  const resourceInstances = await fetch("/api/permit/resourceInstances").then(
+    (res) => res.json(),
+  );
+
+  const channels = resourceInstances.map(
+    (resourceInstance: { key: string }) => ({
+      id: resourceInstance.key,
+    }),
+  );
+
+  return channels;
+};
 
 const ChatChannelList = () => {
   // Retrieves the current path to determine the active channel
   const pathname = usePathname();
+  const [channels, setChannels] = useState<{ id: string }[]>([]);
+
+  useEffect(() => {
+    const fetchChannels = async () => {
+      const channels = await getChannelList();
+      setChannels(channels);
+    };
+    fetchChannels();
+  }, []);
 
   return (
     <ul className="flex flex-col">
@@ -26,7 +44,9 @@ const ChatChannelList = () => {
               pathname === `/chat/${channel.id}` ? "font-bold" : "" // Highlights the active channel
             }`}
           >
-            <span className="truncate">{channel.name}</span>{" "}
+            <span className="truncate">
+              {channel.id == "mod" ? "🔒" : "💬"} {channel.id}
+            </span>{" "}
             {/* Displays the channel name */}
           </Link>
         </li>

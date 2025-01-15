@@ -5,6 +5,7 @@
 // Import necessary components and providers
 import Chat from "@/components/Chat"; // Chat component to handle chat messages and functionality.
 import ChatChannelList from "@/components/Chat/ChannelList"; // Sidebar with a list of available chat channels.
+import ChatUserList from "@/components/Chat/UserList";
 import { Realtime } from "ably"; // Ably Realtime client for managing connections and messaging.
 import { AblyProvider, ChannelProvider } from "ably/react"; // Providers for using Ably hooks in React components.
 import { SessionProvider } from "next-auth/react"; // Provider for managing authentication state.
@@ -19,6 +20,10 @@ const Page = ({ params }: { params: Promise<{ channel: string[] }> }) => {
     authUrl: "/api/ably", // Authorization endpoint to secure the Ably connection.
     autoConnect: typeof window !== "undefined", // Only auto-connect in the browser.
   });
+
+  // client.connection.on("disconnected", (stateChange) => {
+  //   console.log("STATECHANGE ==>", stateChange);
+  // });
 
   // Extract the `channel` parameter from the dynamic route.
   // The `params` object is an async promise containing the route parameters.
@@ -54,6 +59,7 @@ const Page = ({ params }: { params: Promise<{ channel: string[] }> }) => {
               {/* Right Sidebar: Reserved for additional features like a user list */}
               <div className="col-span-1 flex h-full flex-col">
                 {/* TODO: Implement a user list or additional features in the right sidebar */}
+                <ChatUserList channelName={channelName} />
               </div>
             </div>
           </section>
