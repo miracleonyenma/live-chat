@@ -10,7 +10,7 @@ const permit = new Permit({
   token: PERMIT_API_KEY,
 
   // in production, you might need to change this url to fit your deployment
-  pdp: "http://localhost:7766",
+  pdp: "https://7b80-172-190-134-32.ngrok-free.app",
 
   // if you want the SDK to emit logs, uncomment this:
   // log: {
